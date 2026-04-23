@@ -16,7 +16,6 @@ class ArticlesList {
     }
   }
 }
-
 class Articles {
   String? author;
   String? title;

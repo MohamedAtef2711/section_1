@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:section_1/api.dart';
+import 'package:section_1/models.dart';
 import 'carts.dart';
 
 class ArticlesScreen extends StatefulWidget {
@@ -41,26 +42,30 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
           ),
         ],
       ),
-      body: FutureBuilder(future: NewsApi().getArticles(), builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(child: Text("Error: ${snapshot.error}"));
-        }
+      body: FutureBuilder(future: NewsApi().getArticles(), builder:(context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-          return ListView.builder(
-            itemCount: snapshot.data!.articles!.length,
-            itemBuilder: (context, index) => NewsCard(
-              title: snapshot.data!.articles![index].title,
-              author: snapshot.data!.articles![index].author,
-              content: snapshot.data!.articles![index].content,
-              description: snapshot.data!.articles![index].description,
-              publishedAt: snapshot.data!.articles![index].publishedAt,
-              urlToImage: snapshot.data!.articles![index].urlToImage,
-            ),
-          );
-        
+        if (snapshot.hasError) {
+          return const Center(child: Text("Error loading articles"));
+        }
+        if (!snapshot.hasData || snapshot.data!.articles == null) {
+          return const Center(child: Text("No articles found"));
+        }
+      final data = snapshot.data!.articles!;
+      return ListView.builder(
+        itemCount: data.length,
+        itemBuilder: (context, index) => NewsCard(
+          title: data[index].title,
+          author: data[index].author,
+          content: data[index].content,
+          description: data[index].description,
+          publishedAt: data[index].publishedAt,
+          urlToImage: data[index].urlToImage,
+        ),
+      );
       }),
+      
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         showSelectedLabels: true,

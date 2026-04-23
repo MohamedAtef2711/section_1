@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '/models.dart';
-
+import 'models.dart';
  class NewsApi{
   Future<ArticlesList> getArticles() async {
     Uri url = Uri.https(
@@ -9,7 +8,7 @@ import '/models.dart';
       '/v2/everything',
       {
         'q': 'tesla',
-        'from': '2026-03-22',
+        'from': '2026-03-23',
         'sortBy': 'publishedAt',
         'apiKey': '380f7dfe50ee478b8a9c987e466182a6',
       },
